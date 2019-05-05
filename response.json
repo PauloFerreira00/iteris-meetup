@@ -1,0 +1,21 @@
+[
+    {
+        "type": 1,
+        "image": "https://www.iteris.com.br/product/23443.jpg",
+        "name": "Mouse Optico",
+        "price": 12.5,
+        "details": [{ "peso" : "12 gramas"}]
+    },
+    {
+        "type": 2,
+        "owner": "americanas.com",
+        "redirectURL": "https://americanas.com/",
+        "imageURL": "https://americanas.com/campaing1.jpg"
+    },
+    {
+        "type": 3,
+        "identifier": "a123-343--13-23-23",
+        "text": "Qual sua loja preferida?",
+        "options": ["americanas", "submarino", "magazine luiza"]
+    }
+]
