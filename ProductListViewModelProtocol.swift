@@ -33,19 +33,20 @@ extension ProductListViewModel: ProductListViewModelProtocol {
     }
 
     func fetchListOfProducts() {
+        view?.showLoading()
+
         repository.list
             (success: { (itens) in 
                 self.itens = itens
                 self.rows = generate()
 
+                view?.reloadTable()
                 view?.hideLoading()
             }, 
             error: { (error) in 
                 view?.hideLoading()
                 view?.error(message: "Deu ruim")
             })
-
-        view?.showLoading()
     }
 
     func numberOfRows() -> Int { 
@@ -56,11 +57,11 @@ extension ProductListViewModel: ProductListViewModelProtocol {
         return rows[index]
     }
 
-    func generate() -> UITableViewCell {
+    func generate() -> [UITableViewCell] {
         return itens.map { item in 
             if let item = item as? Product {
                 return generator.create(ProductCell.self) { (cell: ProductCellProtocol) in 
-                    cell.define(image: item.image, name: String, prince: String)
+                    cell.define(image: item.image, name: item.name, description: item.description)
                 }
             }
 

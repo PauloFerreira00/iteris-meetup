@@ -10,6 +10,7 @@ class ProductListViewModelTest: XCTestCase {
         vm.fetchListOfProducts()
         XCTAssertTrue(view.showLoadingWasCalled)
         XCTAssertTrue(view.hideLoadingWasCalled)
+        XCTAssertTrue(view.reloadTableWasCalled)
     }
 
     func testFetchWithError() {
@@ -29,12 +30,13 @@ class ProductListViewModelTest: XCTestCase {
 
     func testCellGenerate() {
         let view = MockView()
-        let generator = MockTableGenerator()
         let repository = MockRepository(.sucess([
                 Product.create(), 
                 Feedback.create(), 
                 Advertisement.create()
             ]))
+
+        let generator = MockTableGenerator()
 
         let vm = ProductListViewModel()
         vm.set(view: view)
@@ -52,12 +54,15 @@ class ProductListViewModelTest: XCTestCase {
 class MockView: ProductListViewProtocol {
     var showLoadingWasCalled = false
     var hideLoadingWasCalled = false
+    var reloadTableWasCalled = false
 
     var errorWasCalled = false
     var erroWasCalledWithMessage = ""
 
     func show(title: String, detail: String) {} 
-    func reloadTable() {}
+    func reloadTable() {
+        self.reloadTableWasCalled = true
+    }
 
     func showLoading() {
         self.showLoadingWasCalled = true
@@ -94,9 +99,9 @@ class MockRepository: RepositoryProtocol {
 }
 
 class MockTableGenerator: TableViewCellGenerator {
-    var productCell = MockProductCell()
-    var feedbackCell = MockFeedbackCell()
-    var adCell = MockAdvertisementCell()
+    var productCell: ProductCellProtocol = MockProductCell()
+    var feedbackCell: FeedbackViewProtocol = MockFeedbackCell()
+    var adCell: AdvertisementViewProtocol = MockAdvertisementCell()
 
     func create<T: UITableViewCell, K>(type: T.Type, _ builder: @escaping (K) -> Void) -> UITableViewCell {
         if type == ProductCellTableView.self {
@@ -122,5 +127,5 @@ class MockTableGenerator: TableViewCellGenerator {
             self.defineWasCalled = true
             self.defineWasCalledWith = (image: image, name: name, price: price)
         }
-    }
+    }  
 }
